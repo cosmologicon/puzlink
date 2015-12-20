@@ -1,2 +1,4 @@
 *~
 tests/data/*
+*__pycache__*
+*.pkl
