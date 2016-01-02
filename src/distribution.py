@@ -62,6 +62,9 @@ class Distribution:
 		p = self.letter_moments[len(wordlengths)] ** nmatch
 		return 1 - math.exp(-p * ncombos)
 		
+	# probability that a set of letters of the given length will be equal to a given word.
+	def match_given_prob(self, nletters):
+		return (1/15) ** nletters
 
 def get_letter_frequencies(letters):
 	counts = Counter(letters)
