@@ -31,7 +31,13 @@ class Linker:
 	def letterfreq_links(self, letters):
 		p = self.dist.letters_pvalue(letters)
 		if p < 0.1:
-			yield p, "Differs from English letter distribution."		
+			description = "Differs from English letter distribution."
+			overrep, underrep = self.dist.letters_outliers(letters)
+			if overrep:
+				description += " common: %s." % "".join(overrep)
+			if underrep:
+				description += " uncommon: %s." % "".join(underrep)
+			yield p, description
 
 	def wordlength_links(self, words):
 		for p, description in wordlengths.link(list(map(len, words))):

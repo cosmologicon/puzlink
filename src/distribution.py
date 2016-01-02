@@ -22,6 +22,17 @@ class Distribution:
 		z = (self.letters_chi2(letters) - k) / math.sqrt(2 * k)
 		return scipy.stats.norm.sf(z)
 
+	# Two lists of over- and under-represented letters (at 3 sigma) in the sample.
+	def letters_outliers(self, letters):
+		ns = Counter(letters)
+		n = len(letters)
+		high, low = [], []
+		for letter, freq in self.letter_frequencies.items():
+			expected = freq * n
+			if (expected - ns[letter]) ** 2 / expected > 4:
+				(high if ns[letter] > expected else low).append(letter)
+		return high, low
+
 	def growchoose(self, n):
 		while len(self.choose) <= n:
 			last = self.choose[-1]
