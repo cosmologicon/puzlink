@@ -2,7 +2,7 @@
 
 # linker.link(words) returns a sequence of Linkages for the associated words.
 
-from src import distribution, wordlist, wordlengths
+from src import distribution, wordlist, wordlengths, predicate
 from collections import namedtuple
 
 Linkage = namedtuple("Linkage", ["p", "type", "description"])
@@ -12,12 +12,14 @@ class Linker:
 		letters = "".join(words)
 		self.dist = distribution.Distribution("".join(words))
 		self.wordlist = wordlist.WordList(words)
+		self.predicate_checker = predicate.PredicateChecker(words)
 
 	def link(self, words, ordered = True):
 		generators = []
 		awords = list(acrostics(words))
 		if len(words) >= 3:
 			generators.append(("word length", self.wordlength_links(words)))
+			generators.append(("predicate", self.predicate_links(words)))
 		if len(words) >= 3 and ordered:
 			generators.append(("acrostic", self.acrostic_links(awords)))
 		letters = "".join(words)
@@ -41,6 +43,10 @@ class Linker:
 
 	def wordlength_links(self, words):
 		for p, description in wordlengths.link(list(map(len, words))):
+			yield p, description
+
+	def predicate_links(self, words):
+		for p, description in self.predicate_checker.link(words):
 			yield p, description
 
 	def acrostic_links(self, awords):
