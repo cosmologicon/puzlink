@@ -77,6 +77,10 @@ class Distribution:
 	def match_given_prob(self, nletters):
 		return (1/15) ** nletters
 
+	# probability that a set of letters of the given length is an anagram of a given word.
+	def match_given_anagram_prob(self, nletters):
+		return (1/12) ** nletters
+
 def get_letter_frequencies(letters):
 	counts = Counter(letters)
 	return { letter: count / len(letters) for letter, count in counts.items() }
