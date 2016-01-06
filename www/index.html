@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<meta name=viewport content="width=device-width, user-scalable=no">
+<link href='http://fonts.googleapis.com/css?family=Bubblegum+Sans|Droid+Sans+Mono|Francois+One' rel='stylesheet' type='text/css'>
+<style type="text/css">
+</style>
+<title>puz.link - find connections between words</title>
+<h1>puz.link</h1>
+<div id=running style="display:none">Analyzing. This usually takes a few seconds. Please stand by....</div>
+<div id=error style="display:none"></div>
+<table id=results></table>
+<form>
+<p><textarea id=words name=words rows=8 cols=20 placeholder="Input a set of words." autofocus required></textarea>
+<p><button type=button onclick="go()" style="font-size:133%">Find links</button>
+<p><button type=button onclick="loadexample()">Load example</button>
+</form>
+
+<script>
+var dom = {
+	words: document.getElementById("words"),
+	results: document.getElementById("results"),
+	running: document.getElementById("running"),
+	error: document.getElementById("error"),
+}
+
+function ptoz(p) {
+	if (p > 0.5) return -ptoz(1 - p)
+	var a = 0.147, c = Math.log(4 * p * (1 - p)), d = 2 / (Math.PI * a) + c / 2
+	return Math.sqrt(2 * (Math.sqrt(d * d - c / a) - d))
+}
+function stars(z) {
+	var n = Math.floor(Math.min(Math.max(z / 1.4, 0), 5))
+	return "\u2605".repeat(n) + "\u2606".repeat(5 - n)
+}
+
+function getquery() {
+	var words = dom.words.value.toLowerCase().split(/[\s,\.\']+/)
+	if (words == "") {
+		throw "No words found"
+	}
+	if (!words.every(function (word) { return word.match(/^[a-z\+]*$/) })) {
+		throw "Only letters a-z without accents supported"
+	}
+	return JSON.stringify({
+		words: words,
+		ordered: true,
+	})
+}
+
+function seterror(message) {
+	dom.error.innerHTML = message
+	dom.error.style.display = "block"
+}
+
+
+function update(data) {
+	if (data.error) {
+		seterror(data.error)
+		return
+	}
+
+	var links = data.links
+	links.sort(function (a, b) { return a.p - b.p })
+
+	function addCell(row, text, title) {
+		var node = document.createTextNode(text)
+		var cell = row.insertCell()
+		if (title) cell.setAttribute("title", title)
+		cell.appendChild(node)
+	}
+	var head = dom.results.createTHead().insertRow()
+	addCell(head, "signif.")
+	addCell(head, "link description")
+	for (var j = 0 ; j < links.length ; ++j) {
+		var z = ptoz(links[j].p)
+		var row = dom.results.insertRow()
+		addCell(row, stars(z), "z = " + z.toFixed(1))
+		addCell(row, links[j].description)
+	}
+}
+function go() {
+	try {
+		var query = getquery()
+	} catch (e) {
+		seterror(e)
+		return false
+	}
+	var req = new XMLHttpRequest()
+	req.onload = function () { update(JSON.parse(this.responseText)) }
+	req.open("GET", "report?query=" + encodeURIComponent(query), true)
+	req.send(null)
+	return false
+}
+var examples = [
+	"green undergo opens september augmented bluejay modesty disrepair amend",
+	"emulate civics filibuster addendum biology gravity debut",
+	"creating esteemed hypnosis taciturn educator ulterior paramour decision",
+]
+function loadexample() {
+	document.getElementById("words").value = examples[Math.floor(Math.random() * examples.length)]
+	return false
+}
+
+</script>
