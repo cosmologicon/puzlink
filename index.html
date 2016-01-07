@@ -53,6 +53,7 @@ function seterror(message) {
 
 
 function update(data) {
+	console.log("update", data)
 	if (data.error) {
 		seterror(data.error)
 		return
@@ -85,8 +86,10 @@ function go() {
 		return false
 	}
 	var req = new XMLHttpRequest()
-	req.onload = function () { update(JSON.parse(this.responseText)) }
-	req.open("GET", "report?query=" + encodeURIComponent(query), true)
+	req.onload = function () { console.log(this, this.responseText) ; update(JSON.parse(this.responseText)) }
+	var url = "http://puz.link/report?query=" + encodeURIComponent(query)
+	console.log(url)
+	req.open("GET", url, true)
 	req.send(null)
 	return false
 }

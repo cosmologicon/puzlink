@@ -34,5 +34,6 @@ class PredicateChecker:
 				for word in words:
 					p *= self.fpassbylength.get((name, len(word)), f0)
 				p *= len(predicates)
-				yield p, "Every word " + name
+				if p < 0.9:
+					yield p, "Every word " + name
 

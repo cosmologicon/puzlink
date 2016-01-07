@@ -1,5 +1,4 @@
 import cgi, cgitb, json, pickle
-from lib import config, report, util
 cgitb.enable(display = 0, logdir = "/tmp")
 
 def finish(data):
@@ -7,34 +6,32 @@ def finish(data):
 	print()
 	print(json.dumps(data))
 	exit()
-def error(message):
-	finish({ "error": message })
+def error(message, exception = None):
+	finish({ "error": message, "exception": str(exception) })
 
 form = cgi.FieldStorage()
-try {
+try:
 	query = form.getvalue("query")
 	if len(query) > 10000:
 		error("Query too long")
-	query = json.parse(query)
+	query = json.loads(query)
 	words = query["words"]
 	ordered = query["ordered"]
 	if len(words) < 1:
 		error("Need at least one word")
-} except {
-	error("Missing or malformed query")
-}
+except Exception as e:
+	error("Missing or malformed query", exception = e)
 
 # with open("queries.txt", "a") as f:
 # 	f.write(json.dump(query) + "\n")
 
 linkerfile = "linker.pkl"
 response = { "links": [] }
-try {
+try:
 	linker = pickle.load(open(linkerfile, "rb"))
 	for p, type, description in linker.link(words):
 		response["links"].append({ "p": p, "type": type, "description": description })
-} except {
-	error("Server error: unable to evaluate linker")
-}
+except Exception as e:
+	error("Server error: unable to evaluate linker", exception = e)
 
 finish(response)
