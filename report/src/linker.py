@@ -3,7 +3,8 @@
 # linker.link(words) returns a sequence of Linkages for the associated words.
 
 from src import distribution, wordlist, wordlengths, predicate, substring
-from collections import namedtuple
+from functools import reduce
+from collections import namedtuple, Counter
 
 Linkage = namedtuple("Linkage", ["p", "type", "description"])
 
@@ -19,6 +20,8 @@ class Linker:
 		generators = []
 		major_awords = list(major_acrostics(words, ordered))
 		awords = list(acrostics(words, ordered))
+		if len(words) >= 2:
+			generators.append(("common letters", self.commonletters_links(words)))
 		if len(words) >= 3:
 			generators.append(("word length", self.wordlength_links(words)))
 			generators.append(("predicate", self.predicate_links(words)))
@@ -37,8 +40,15 @@ class Linker:
 					continue
 				yield p, name, description
 
+	def commonletters_links(self, words):
+		cs = map(Counter, words)
+		common = "".join(sorted(reduce(lambda a, b: a & b, cs).elements()))
+		if common:
+			p = self.dist.nmatch_pvalue(len(common), list(map(len, words)))
+			yield p, "Letters in common: " + common
+
 	def letterfreq_links(self, letters):
-		p = self.dist.letters_pvalue(letters)
+		p = self.dist.letters_pvalue(letters) * 100
 		if p < 0.1:
 			description = "Differs from English letter distribution."
 			overrep, underrep = self.dist.letters_outliers(letters)

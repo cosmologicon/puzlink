@@ -40,11 +40,12 @@ class Distribution:
 
 	# p-value that words of the given lengths will have at least nmatch letters in common
 	def nmatch_pvalue(self, nmatch, wordlengths):
-		p = 1.0
-		pj = 1/26
+		if nmatch == 0:
+			return 1 if all(wordlength >= 0 for wordlength in wordlengths) else 0
+		p = (1/15) ** len(wordlengths) * self.nmatch_pvalue(nmatch - 1, [wordlength - 1 for wordlength in wordlengths])
 		for w in wordlengths:
-			p *= w * (w - 1) * pj ** 2 * (1 - 2 * pj) ** (w - 2)  # math.exp(-(w - 1) * (pj + pj))
-		return p / pj ** 2
+			p *= w
+		return p
 
 
 		self.growchoose(max(wordlengths))

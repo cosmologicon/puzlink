@@ -7,6 +7,7 @@ predicates = [
 	("has a single repeated letter", lambda word: len(word) == len(set(word)) + 1),
 	("is in alphabetical order", lambda word: list(word) == sorted(word)),
 	("starts and ends with the same letter", lambda word: word[0] == word[-1]),
+	("has a letter that appears at least 3 times", lambda word: Counter(word).most_common()[0][1] >= 3),
 ]
 
 class PredicateChecker:
