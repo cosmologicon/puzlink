@@ -100,7 +100,7 @@ function ptoz(p) {
 	return Math.sqrt(2 * (Math.sqrt(d * d - c / a) - d))
 }
 function stars(z) {
-	var n = Math.floor(Math.min(Math.max(z / 1.4, 0), 5))
+	var n = Math.floor(Math.min(Math.max(z / 1, 0), 5))
 	return "\u2605".repeat(n) + "\u2606".repeat(5 - n)
 }
 
@@ -167,14 +167,17 @@ function go() {
 	return false
 }
 var examples = [
-	"green undergo opens september augmented bluejay modesty disrepair amend",
-	"emulate civics filibuster addendum biology gravity debut",
-	"creating esteemed hypnosis taciturn educator ulterior paramour decision",
+	"press hill apes nerds times ordinary mill",
+	"chokechain hourhand lithograph shibboleth shortsighted thermophile",
+	"amontillados blooming calcutta dilemma piazzas squareness",
+	"antithetic crosshatches gaggle nonconsenting pneumococcal prestidigitation smogless trunnions",
+	"grimaced formally questionable discouraged communicated chysalis saccharin",
+	"thumbtacks monologue frigidities statuesque testimony satirizing flawed",
 ]
 function loadexample() {
 	document.getElementById("words").value = examples[Math.floor(Math.random() * examples.length)]
 	return false
 }
-update({"links": [{"p": 0.078125, "type": "word length", "description": "Word lengths are all odd."}, {"p": 4.292028654168572e-08, "type": "acrostic", "description": "center letters are identical (e)"}]})
+//update({"links": [{"p": 0.078125, "type": "word length", "description": "Word lengths are all odd."}, {"p": 4.292028654168572e-08, "type": "acrostic", "description": "center letters are identical (e)"}]})
 
 </script>
