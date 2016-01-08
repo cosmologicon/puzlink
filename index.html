@@ -1,17 +1,89 @@
 <!DOCTYPE html>
 <meta name=viewport content="width=device-width, user-scalable=no">
-<link href='http://fonts.googleapis.com/css?family=Bubblegum+Sans|Droid+Sans+Mono|Francois+One' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Chela+One|Special+Elite|Boogaloo|Jolly+Lodger' rel='stylesheet' type='text/css'>
 <style type="text/css">
+body {
+	background: #363;
+	color: white;
+	text-align: center;
+}
+* {
+	margin-left: auto;
+	margin-right: auto;
+}
+h1 {
+	font-size: 300%;
+	font-family: "Chela One";
+	font-weight: normal;
+	color: white;
+	text-shadow: 0.06em 0.06em 0 black;
+	letter-spacing: 0.08em;
+	margin: 0;
+}
+#words {
+	font-family: "Special Elite";
+	font-size: 160%;
+	padding: 0.4em;
+	color: white;
+	background: rgba(0,0,0,0.5);
+	line-height: 1.3;
+	letter-spacing: 0.06em;
+}
+button {
+	font-family: "Boogaloo";
+	font-size: 200%;
+	border-radius: 0.6em;
+	padding: 0.3em;
+	background: #050;
+	color: white;
+	text-shadow: 0.08em 0.08em 0 black;
+}
+#gobutton {
+	font-size: 250%;
+}
+#error {
+	font-size: 200%;
+	font-family: "Jolly Lodger";
+	margin: 0.5em;
+	color: #FAA;
+	text-shadow: 0.08em 0.08em 0 black;
+}
+#results {
+	border-spacing: 0;
+	font-family: "Boogaloo";
+	font-size: 150%;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	max-width: 20em;
+}
+#results tr:first-child td {
+	border-bottom: thin gray outset;
+}
+#results tr:nth-child(2) td {
+	border-top: thin gray outset;
+}
+#results th, td {
+	padding: 0.2em 0.8em;
+}
+#results tr:nth-child(even) {
+	background: rgba(0,0,0,0.1);
+}
+#results td:first-child {
+	border-right: thin gray outset;
+}
+#results td:nth-child(2) {
+	border-left: thin gray outset;
+}
 </style>
 <title>puz.link - find connections between words</title>
-<h1>puz.link</h1>
+<h1>puz&middot;link</h1>
 <div id=running style="display:none">Analyzing. This usually takes a few seconds. Please stand by....</div>
 <div id=error style="display:none"></div>
 <table id=results></table>
 <form>
 <p><textarea id=words name=words rows=8 cols=20 placeholder="Input a set of words." autofocus required></textarea>
-<p><button type=button onclick="go()" style="font-size:133%">Find links</button>
-<p><button type=button onclick="loadexample()">Load example</button>
+<p><button type=button onclick="go()" id=gobutton>Find links</button>
+<p><button type=button onclick="loadexample()" id=examplebutton>Load example</button>
 </form>
 
 <script>
@@ -69,7 +141,7 @@ function update(data) {
 		cell.appendChild(node)
 	}
 	var head = dom.results.createTHead().insertRow()
-	addCell(head, "signif.")
+	addCell(head, "significance")
 	addCell(head, "link description")
 	for (var j = 0 ; j < links.length ; ++j) {
 		var z = ptoz(links[j].p)
@@ -79,6 +151,7 @@ function update(data) {
 	}
 }
 function go() {
+	dom.results.innerHTML = ""
 	try {
 		var query = getquery()
 	} catch (e) {
@@ -102,5 +175,6 @@ function loadexample() {
 	document.getElementById("words").value = examples[Math.floor(Math.random() * examples.length)]
 	return false
 }
+update({"links": [{"p": 0.078125, "type": "word length", "description": "Word lengths are all odd."}, {"p": 4.292028654168572e-08, "type": "acrostic", "description": "center letters are identical (e)"}]})
 
 </script>
