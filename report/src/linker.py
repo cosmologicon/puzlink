@@ -2,7 +2,7 @@
 
 # linker.link(words) returns a sequence of Linkages for the associated words.
 
-from src import distribution, wordlist, wordlengths, predicate
+from src import distribution, wordlist, wordlengths, predicate, substring
 from collections import namedtuple
 
 Linkage = namedtuple("Linkage", ["p", "type", "description"])
@@ -13,6 +13,7 @@ class Linker:
 		self.dist = distribution.Distribution("".join(words))
 		self.wordlist = wordlist.WordList(words)
 		self.predicate_checker = predicate.PredicateChecker(words)
+		self.substring_counter = substring.SubstringCounter(words)
 
 	def link(self, words, ordered = True):
 		generators = []
@@ -27,10 +28,14 @@ class Linker:
 		letters = "".join(words)
 		if len(letters) >= 10:
 			generators.append(("letter freq.", self.letterfreq_links(letters)))
+			generators.append(("subwords", self.substring_counter.link(words)))
 		
 		for name, generator in generators:
 			for p, description in generator:
-				yield p * len(generators), name, description
+				p *= len(generators)
+				if p > 0.9:
+					continue
+				yield p, name, description
 
 	def letterfreq_links(self, letters):
 		p = self.dist.letters_pvalue(letters)
