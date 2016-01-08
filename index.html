@@ -20,6 +20,13 @@ h1 {
 	letter-spacing: 0.08em;
 	margin: 0;
 }
+#running {
+	font-size: 200%;
+	color: #aaf;
+	text-shadow: 0.06em 0.06em 0 black;
+	font-family: "Boogaloo";
+	margin-top: 1em;
+}
 #words {
 	font-family: "Special Elite";
 	font-size: 160%;
@@ -77,7 +84,7 @@ button {
 </style>
 <title>puz.link - find connections between words</title>
 <h1>puz&middot;link</h1>
-<div id=running style="display:none">Analyzing. This usually takes a few seconds. Please stand by....</div>
+<div id=running style="display:none">Analyzing....</div>
 <div id=error style="display:none"></div>
 <table id=results></table>
 <form>
@@ -123,9 +130,8 @@ function seterror(message) {
 	dom.error.style.display = "block"
 }
 
-
 function update(data) {
-	console.log("update", data)
+	dom.running.style.display = "none"
 	if (data.error) {
 		seterror(data.error)
 		return
@@ -152,6 +158,8 @@ function update(data) {
 }
 function go() {
 	dom.results.innerHTML = ""
+	dom.error.style.display = "none"
+	dom.running.style.display = "block"
 	try {
 		var query = getquery()
 	} catch (e) {

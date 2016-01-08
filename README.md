@@ -4,6 +4,7 @@ Tool to find patterns among sets of words.
 
 ## Set up
 
+	cd report
 	python3 make.py [wordlist]
 
 `wordlist.txt` defaults to `"/usr/share/dict/words"`. The word list has two purposes. First, to get
