@@ -13,7 +13,7 @@ class Linker:
 		letters = "".join(words)
 		self.dist = distribution.Distribution("".join(words))
 		self.wordlist = wordlist.WordList(words)
-		self.predicate_checker = predicate.PredicateChecker(words)
+		self.predicate_checker = predicate.PredicateChecker(words, self.wordlist)
 		self.substring_counter = substring.SubstringCounter(words)
 
 	def link(self, words, ordered = True):
@@ -65,7 +65,7 @@ class Linker:
 			yield p, description
 
 	def predicate_links(self, words):
-		for p, description in self.predicate_checker.link(words):
+		for p, description in self.predicate_checker.link(words, self.wordlist):
 			yield p, description
 
 	def acrostic_links(self, awords, ordered):
