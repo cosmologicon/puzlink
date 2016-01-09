@@ -38,6 +38,11 @@ class WordList:
 			if suffix:
 				yield suffix[::-1], count
 
+	def can_prepend_letter(self, word):
+		node = get_trie_node(self.reverse_trie, word[::-1])
+		if node is None:
+			return False
+		return any(letter is not None and None in subnode for letter, subnode in node.items())
 
 def maketrie(wordset):
 	from collections import defaultdict
