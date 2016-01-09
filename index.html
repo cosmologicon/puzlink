@@ -112,13 +112,14 @@ function stars(z) {
 }
 
 function getquery() {
-	var words = dom.words.value.toLowerCase().split(/[\s,\.\']+/)
+	var words = dom.words.value.replace(/[\-\.\,\'\"]/g, "").toLowerCase().split(/\s+/)
 	if (words == "") {
 		throw "No words found"
 	}
 	if (!words.every(function (word) { return word.match(/^[a-z\+]*$/) })) {
 		throw "Only letters a-z without accents supported"
 	}
+	dom.words.value = words.join(" ")
 	return JSON.stringify({
 		words: words,
 		ordered: true,
