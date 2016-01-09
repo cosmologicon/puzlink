@@ -4,6 +4,8 @@ substring_sets = {
 	"Greek letters": "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega".split(),
 	"days of the week": "sun mon tue wed thu fri sat".split(),
 	"months": "jan feb mar apr may jun jul aug sep oct nov dec".split(),
+	"numbers": "one two three four five six seven eight nine ten eleven twelve zero".split(),
+	"body parts": "leg arm hand foot knee elbow ankle neck head ear eye nose mouth hair lip tongue chin face back calf thigh".split(),
 }
 
 class SubstringCounter:

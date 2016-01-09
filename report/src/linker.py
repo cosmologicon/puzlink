@@ -23,9 +23,9 @@ class Linker:
 		awords = list(acrostics(words, ordered))
 		if len(swords) >= 2:
 			generators.append(("common letters", self.commonletters_links(swords)))
+			generators.append(("predicate", self.predicate_links(swords)))
 		if len(swords) >= 3:
 			generators.append(("word length", self.wordlength_links(swords)))
-			generators.append(("predicate", self.predicate_links(swords)))
 			generators.append(("affixes", self.get_affix_links(swords)))
 		if len(words) >= 3 and ordered:
 			generators.append(("acrostic", self.acrostic_links(awords, ordered)))
@@ -34,7 +34,7 @@ class Linker:
 		if len(letters) >= 10:
 			generators.append(("letter freq.", self.letterfreq_links(letters)))
 			generators.append(("subwords", self.substring_counter.link(words)))
-		
+
 		for name, generator in generators:
 			for p, description in generator:
 				p *= len(generators)
