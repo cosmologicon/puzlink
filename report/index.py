@@ -12,6 +12,7 @@ def error(message, exception = None):
 form = cgi.FieldStorage()
 try:
 	query = form.getvalue("query")
+#	query = '{"words":["a"],"ordered":true}'
 	if len(query) > 10000:
 		error("Query too long")
 	query = json.loads(query)
@@ -22,8 +23,8 @@ try:
 except Exception as e:
 	error("Missing or malformed query", exception = e)
 
-# with open("queries.txt", "a") as f:
-# 	f.write(json.dump(query) + "\n")
+with open("queries.txt", "a") as f:
+	f.write(json.dumps(query) + "\n")
 
 linkerfile = "linker.pkl"
 response = { "links": [] }

@@ -20,7 +20,7 @@ class SubstringCounter:
 		joined = " ".join(words)
 		for set_name, substring_set in substring_sets.items():
 			n = sum(joined.count(substring) for substring in substring_set)
-			if n < len(words) // 2:
+			if n < len(words) // 2 or n < 2:
 				continue
 			expected = self.averages[set_name] * ntotal
 			# Poisson cdf

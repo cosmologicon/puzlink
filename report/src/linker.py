@@ -17,14 +17,16 @@ class Linker:
 		self.substring_counter = substring.SubstringCounter(words)
 
 	def link(self, words, ordered = True):
+		swords = list(set(words))
 		generators = []
 		major_awords = list(major_acrostics(words, ordered))
 		awords = list(acrostics(words, ordered))
-		if len(words) >= 2:
-			generators.append(("common letters", self.commonletters_links(words)))
-		if len(words) >= 3:
-			generators.append(("word length", self.wordlength_links(words)))
-			generators.append(("predicate", self.predicate_links(words)))
+		if len(swords) >= 2:
+			generators.append(("common letters", self.commonletters_links(swords)))
+		if len(swords) >= 3:
+			generators.append(("word length", self.wordlength_links(swords)))
+			generators.append(("predicate", self.predicate_links(swords)))
+			generators.append(("affixes", self.get_affix_links(swords)))
 		if len(words) >= 3 and ordered:
 			generators.append(("acrostic", self.acrostic_links(awords, ordered)))
 			generators.append(("acrostic", self.secondary_acrostic_links(major_awords, ordered)))
@@ -88,6 +90,39 @@ class Linker:
 				p = self.dist.match_given_anagram_prob(len(aword))
 				p *= self.wordlist.nwordsbylettercount(len(aword))
 				yield p * ntest, "%s (%s) is an anagram of a common word (%s)" % (aset, aword, anagram)
+
+	def get_affix_links(self, words):
+		def beats(p1, p2):
+			(a1, n1), (a2, n2) = p1, p2
+			if n1 < n2 and len(a1) < len(a2):
+				return False
+			if n1 > n2:
+				return True
+			if len(a1) > len(a2):
+				return True
+			return a1 <= a2
+		prefixes = list(self.wordlist.common_prefixes(words))
+		for a, n in prefixes:
+			if a in ["un"]:
+				continue
+			if all(beats((a, n), p) for p in prefixes):
+				p = (1/50) ** len(words)
+				if n < len(words):
+					p *= 50 * len(words)
+				description = ("All words" if n == len(words) else "All words but %d" % (len(words) - n))
+				description += " can take a prefix: " + a
+				yield p, description
+		suffixes = list(self.wordlist.common_suffixes(words))
+		for a, n in suffixes:
+			if a in ["s", "ing", "ed", "ly"]:
+				continue
+			if all(beats((a, n), p) for p in suffixes):
+				p = (1/50) ** len(words)
+				if n < len(words):
+					p *= 50 * len(words)
+				description = ("All words" if n == len(words) else "All words but %d" % (len(words) - n))
+				description += " can take a suffix: " + a
+				yield p, description
 
 def nth(n):
 	return "%s%s" % (n, "th st nd rd th th th th th th".split()[n % 10])
