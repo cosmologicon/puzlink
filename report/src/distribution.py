@@ -82,6 +82,11 @@ class Distribution:
 	def match_given_anagram_prob(self, nletters):
 		return (1/12) ** nletters
 
+	# probability that a set of letters of the given length has a run of consecutive letters.
+	def contain_alphabetic_run(self, nletters, nrun):
+		return (1/12) ** (nrun - 1) * (nletters - nrun + 1)
+
+
 def get_letter_frequencies(letters):
 	counts = Counter(letters)
 	return { letter: count / len(letters) for letter, count in counts.items() }

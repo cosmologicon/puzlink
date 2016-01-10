@@ -3,6 +3,7 @@
 # linker.link(words) returns a sequence of Linkages for the associated words.
 
 from src import distribution, wordlist, wordlengths, predicate, substring
+from itertools import groupby
 from functools import reduce
 from collections import namedtuple, Counter
 
@@ -79,7 +80,7 @@ class Linker:
 				yield p * ntest, "%s are all one of two (%s)" % (aset, "".join(sorted(set(aword))))
 
 	def secondary_acrostic_links(self, awords, ordered):
-		ntest = len(awords) * (2 if ordered else 1)
+		ntest = len(awords) * (3 if ordered else 1)
 		for aset, aword in awords:
 			if ordered and self.wordlist.iscommonword(aword):
 				p = self.dist.match_given_prob(len(aword))
@@ -90,6 +91,12 @@ class Linker:
 				p = self.dist.match_given_anagram_prob(len(aword))
 				p *= self.wordlist.nwordsbylettercount(len(aword))
 				yield p * ntest, "%s (%s) is an anagram of a common word (%s)" % (aset, aword, anagram)
+			if ordered:
+				ms = [ord(x) + 1 == ord(y) for x, y in zip(aword, aword[1:])]
+				if True in ms:
+					n = max(len(list(i)) for m, i in groupby(ms) if m) + 1
+					p = self.dist.contain_alphabetic_run(len(aword), n)
+					yield p * ntest, "%s (%s) contains a length-%d alphabetic run" % (aset, aword, n)
 
 	def get_affix_links(self, words):
 		def beats(p1, p2):
