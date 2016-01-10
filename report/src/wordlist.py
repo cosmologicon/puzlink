@@ -39,7 +39,7 @@ class WordList:
 				yield suffix[::-1], count
 
 	def can_prepend_letter(self, word):
-		return self.reverse_trie.can_extend_by_one(word)
+		return self.reverse_trie.can_extend_by_one(word[::-1])
 
 if __name__ == "__main__":
 	wordlist = WordList([line.strip() for line in open("/usr/share/dict/words")])

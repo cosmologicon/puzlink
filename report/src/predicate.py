@@ -6,11 +6,14 @@ predicates = [
 	("has no repeated letters", lambda word, _: len(word) == len(set(word))),
 	("has a single repeated letter", lambda word, _: len(word) == len(set(word)) + 1),
 	("is in alphabetical order", lambda word, _: list(word) == sorted(word)),
+	("is in reverse alphabetical order", lambda word, _: list(word) == sorted(word, reverse = True)),
+	("is close to alphabetical order", lambda word, _: sum(l1 <= l2 for l1, l2 in zip(word, word[1:])) >= len(word) - 2),
 	("starts and ends with the same letter", lambda word, _: word[0] == word[-1]),
 	("has a letter that appears at least 3 times", lambda word, _: Counter(word).most_common()[0][1] >= 3),
 #	("ends in a shorter word", lambda word, wordlist: any(word[n:] in wordlist.wordset for n in range(1, len(word) - 2))),
 	("makes another word by removing the first letter", lambda word, wordlist: word[1:] in wordlist.wordset),
 	("can make another word by prepending a letter", lambda word, wordlist: wordlist.can_prepend_letter(word)),
+	("alternates vowels and consonants", lambda word, _: all((l1 in "aeiou") != (l2 in "aeiou") for l1, l2 in zip(word, word[1:]))),
 ]
 
 class PredicateChecker:

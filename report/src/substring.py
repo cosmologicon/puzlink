@@ -6,6 +6,8 @@ substring_sets = {
 	"months": "jan feb mar apr may jun jul aug sep oct nov dec".split(),
 	"numbers": "one two three four five six seven eight nine ten eleven twelve zero".split(),
 	"body parts": "leg arm hand foot knee elbow ankle neck head ear eye nose mouth hair lip tongue chin face back calf thigh".split(),
+	"consecutive letters": "ab bc cd de ef fg gh hi ij jk kl lm mn no op pq qr rs st tu uv vw wx xy yz".split(),
+	"consecutive letter trios": "abc bcd cde def efg fgh ghi hij ijk jkl klm lmn mno nop opq pqr qrs rst stu tuv uvw vwx wxy xyz".split(),
 }
 
 class SubstringCounter:

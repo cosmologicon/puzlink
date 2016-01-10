@@ -39,11 +39,16 @@ h1 {
 button {
 	font-family: "Boogaloo";
 	font-size: 200%;
+	border-color: gray;
 	border-radius: 0.6em;
 	padding: 0.3em;
 	background: #050;
 	color: white;
 	text-shadow: 0.08em 0.08em 0 black;
+}
+button:focus {
+	outline: none;
+	border-color: white;
 }
 #gobutton {
 	font-size: 250%;
@@ -182,6 +187,10 @@ var examples = [
 	"antithetic crosshatches gaggle nonconsenting pneumococcal prestidigitation smogless trunnions",
 	"grimaced formally questionable discouraged communicated chysalis saccharin",
 	"thumbtacks monologue frigidities statuesque testimony satirizing flawed",
+	"arcdetriomphescalemodel uvwavedetector gearstick firstprize thiefgamemanual monopoly tuvalutravelguide",
+	"rib node emission lamp ward cent cam",
+	"citygates impulsive clickspam baptistry leviathan policecar coupdetat sforzando cartwheel",
+	"lowered levitate inanimate paradise leveraged sizes tuxedo",
 ]
 function loadexample() {
 	document.getElementById("words").value = examples[Math.floor(Math.random() * examples.length)]
