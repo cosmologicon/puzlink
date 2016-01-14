@@ -174,7 +174,7 @@ function go() {
 	}
 	var req = new XMLHttpRequest()
 	req.onload = function () { console.log(this, this.responseText) ; update(JSON.parse(this.responseText)) }
-	var url = "http://puz.link/report?query=" + encodeURIComponent(query)
+	var url = "report?query=" + encodeURIComponent(query)
 	console.log(url)
 	req.open("GET", url, true)
 	req.send(null)
