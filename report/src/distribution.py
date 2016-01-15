@@ -86,6 +86,11 @@ class Distribution:
 	def contain_alphabetic_run(self, nletters, nrun):
 		return (1/12) ** (nrun - 1) * (nletters - nrun + 1)
 
+	# probablility that a string is a palindrome
+	def is_palindrome(self, nletters):
+		n = nletters // 2
+		return (1/15) ** nletters
+
 
 def get_letter_frequencies(letters):
 	counts = Counter(letters)

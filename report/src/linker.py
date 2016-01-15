@@ -7,8 +7,6 @@ from itertools import groupby
 from functools import reduce
 from collections import namedtuple, Counter
 
-Linkage = namedtuple("Linkage", ["p", "type", "description"])
-
 class Linker:
 	def __init__(self, words):
 		letters = "".join(words)
@@ -84,7 +82,7 @@ class Linker:
 				yield p * ntest, "%s (%s) is a common word" % (aset, aword)
 
 	def secondary_acrostic_links(self, awords, ordered):
-		ntest = len(awords) * (2 if ordered else 1)
+		ntest = len(awords) * (3 if ordered else 1)
 		for aset, aword in awords:
 			if self.wordlist.iscommonanagram(aword) and not (ordered and self.wordlist.iscommonword(aword)):
 				anagram = self.wordlist.getanagram(aword)
@@ -97,6 +95,9 @@ class Linker:
 					n = max(len(list(i)) for m, i in groupby(ms) if m) + 1
 					p = self.dist.contain_alphabetic_run(len(aword), n)
 					yield p * ntest, "%s (%s) contains a length-%d alphabetic run" % (aset, aword, n)
+			if ordered and aword == aword[::-1]:
+				p = self.dist.is_palindrome(len(aword))
+				yield p * ntest, "%s (%s) is a palindrome" % (aset, aword)
 
 	def get_affix_links(self, words):
 		def beats(p1, p2):

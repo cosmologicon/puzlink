@@ -36,6 +36,14 @@ h1 {
 	line-height: 1.3;
 	letter-spacing: 0.06em;
 }
+#linktorepo a {
+	font-size: 200%;
+	color: #aaf;
+	text-shadow: 0.06em 0.06em 0 black;
+	font-family: "Boogaloo";
+	margin-top: 1em;
+	text-decoration: none;
+}
 button {
 	font-family: "Boogaloo";
 	font-size: 200%;
@@ -97,13 +105,17 @@ button:focus {
 <p><button type=button onclick="go()" id=gobutton>Find links</button>
 <p><button type=button onclick="loadexample()" id=examplebutton>Load example</button>
 </form>
-
+<div id=linktorepo style="display:none"><a href="linktorepo.html">If you are not a member of team Control Group, please click here</a></div>
 <script>
 var dom = {
 	words: document.getElementById("words"),
 	results: document.getElementById("results"),
 	running: document.getElementById("running"),
 	error: document.getElementById("error"),
+	linktorepo: document.getElementById("linktorepo"),
+}
+if (window.location.hostname == "puz.link") {
+	dom.linktorepo.style.display = "block"
 }
 
 function ptoz(p) {
