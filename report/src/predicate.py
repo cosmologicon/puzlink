@@ -14,6 +14,7 @@ predicates = [
 	("makes another word by removing the first letter", lambda word, wordlist: word[1:] in wordlist.wordset),
 	("can make another word by prepending a letter", lambda word, wordlist: wordlist.can_prepend_letter(word)),
 	("alternates vowels and consonants", lambda word, _: all((l1 in "aeiou") != (l2 in "aeiou") for l1, l2 in zip(word, word[1:]))),
+	("is a palindrome", lambda word, _: word == word[::-1]),
 ]
 
 class PredicateChecker:

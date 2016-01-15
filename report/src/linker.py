@@ -70,7 +70,7 @@ class Linker:
 			yield p, description
 
 	def acrostic_links(self, awords, ordered):
-		ntest = len(awords) * 2
+		ntest = len(awords) * (3 if ordered else 2)
 		for aset, aword in awords:
 			if len(set(aword)) == 1:
 				p = (1 / 15) ** (len(aword) - 1)
@@ -78,15 +78,15 @@ class Linker:
 			elif len(set(aword)) == 2:
 				p = (2 / 15) ** (len(aword) - 2)
 				yield p * ntest, "%s are all one of two (%s)" % (aset, "".join(sorted(set(aword))))
-
-	def secondary_acrostic_links(self, awords, ordered):
-		ntest = len(awords) * (3 if ordered else 1)
-		for aset, aword in awords:
 			if ordered and self.wordlist.iscommonword(aword):
 				p = self.dist.match_given_prob(len(aword))
 				p *= self.wordlist.nwordsbylettercount(len(aword))
 				yield p * ntest, "%s (%s) is a common word" % (aset, aword)
-			elif self.wordlist.iscommonanagram(aword):
+
+	def secondary_acrostic_links(self, awords, ordered):
+		ntest = len(awords) * (2 if ordered else 1)
+		for aset, aword in awords:
+			if self.wordlist.iscommonanagram(aword) and not (ordered and self.wordlist.iscommonword(aword)):
 				anagram = self.wordlist.getanagram(aword)
 				p = self.dist.match_given_anagram_prob(len(aword))
 				p *= self.wordlist.nwordsbylettercount(len(aword))
@@ -154,4 +154,6 @@ def acrostics(words, ordered):
 		yield "nth letters", "".join(word[n] for n, word in enumerate(words))
 	if all(len(word) % 2 == 1 for word in words):
 		yield "center letters", "".join(word[len(word) // 2] for word in words)
+	if all(len(word) > 1 for word in words):
+		yield "first two letters joined", "".join(word[:2] for word in words)
 
